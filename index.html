@@ -89,15 +89,15 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: clamp(10px, 2vh, 20px);
+            gap: clamp(6px, 2vh, 20px);
             width: 100%;
             flex: 1;
         }
 
         .metric-card {
             background: var(--card-bg);
-            border-radius: clamp(8px, 1.5vh, 18px);
-            padding: clamp(10px, 3vh, 36px) clamp(8px, 2.5vw, 32px);
+            border-radius: clamp(6px, 1.5vh, 18px);
+            padding: clamp(6px, 3vh, 36px) clamp(6px, 2.5vw, 32px);
             width: 100%;
             height: 100%;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
@@ -135,26 +135,27 @@
         .card-header {
             display: flex;
             flex-direction: column;
-            gap: clamp(2px, 0.8vh, 8px);
+            gap: clamp(1px, 0.8vh, 8px);
             flex-shrink: 0;
         }
 
         .card-title {
-            font-size: clamp(9px, 1.8vh, 18px);
+            font-size: clamp(7px, 1.8vh, 18px);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: clamp(0.5px, 0.25vw, 2px);
+            letter-spacing: clamp(0.3px, 0.25vw, 2px);
             color: var(--accent-color);
             opacity: 0.9;
             display: flex;
             align-items: center;
-            gap: clamp(3px, 0.8vw, 10px);
+            gap: clamp(2px, 0.8vw, 10px);
+            line-height: 1.1;
         }
 
         .card-title::before {
             content: '';
-            width: clamp(5px, 1.2vh, 12px);
-            height: clamp(5px, 1.2vh, 12px);
+            width: clamp(4px, 1.2vh, 12px);
+            height: clamp(4px, 1.2vh, 12px);
             border-radius: 50%;
             background: var(--accent-color);
             opacity: 0.8;
@@ -162,16 +163,18 @@
         }
 
         .card-subtitle {
-            font-size: clamp(9px, 1.8vh, 18px);
+            font-size: clamp(7px, 1.8vh, 18px);
             color: var(--text-secondary);
             font-weight: 600;
-            line-height: 1.2;
+            line-height: 1.1;
             opacity: 0.95;
             cursor: pointer;
             display: flex;
-            align-items: center;
-            gap: clamp(4px, 1vw, 12px);
+            align-items: flex-start;
+            gap: clamp(3px, 1vw, 12px);
             flex-wrap: wrap;
+            max-height: 2.2em;
+            overflow: hidden;
             transition: color 0.2s ease;
         }
 
@@ -183,9 +186,9 @@
             background: transparent;
             color: var(--accent-color);
             border: 1.5px solid var(--accent-color);
-            border-radius: clamp(4px, 1.2vh, 12px);
-            padding: clamp(3px, 0.8vh, 8px) clamp(6px, 1.5vw, 14px);
-            font-size: clamp(8px, 1.5vh, 15px);
+            border-radius: clamp(3px, 1.2vh, 12px);
+            padding: clamp(2px, 0.8vh, 8px) clamp(4px, 1.5vw, 14px);
+            font-size: clamp(6px, 1.5vh, 15px);
             font-weight: 700;
             cursor: pointer;
             outline: none;
@@ -193,9 +196,9 @@
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23337ea9' stroke='%23337ea9' stroke-width='0.5' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right clamp(4px, 1.2vw, 12px) center;
-            background-size: clamp(8px, 1.5vh, 14px);
-            padding-right: clamp(20px, 3vw, 36px);
+            background-position: right clamp(3px, 1.2vw, 12px) center;
+            background-size: clamp(6px, 1.5vh, 14px);
+            padding-right: clamp(16px, 3vw, 36px);
             opacity: 0.95;
         }
 
@@ -217,27 +220,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: clamp(4px, 2vh, 16px) 0;
+            padding: clamp(2px, 2vh, 16px) 0;
         }
 
         .metric-value {
-            font-size: clamp(20px, 7vh, 72px);
+            font-size: clamp(16px, 7vh, 72px);
             font-weight: 900;
             background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-dark, var(--accent-color)) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 0.9;
+            line-height: 0.85;
             letter-spacing: -0.05em;
             font-variant-numeric: tabular-nums;
         }
 
         .metric-suffix {
-            font-size: clamp(8px, 2vh, 20px);
+            font-size: clamp(6px, 2vh, 20px);
             font-weight: 700;
             color: var(--accent-color);
-            opacity: 0.8;
-            margin-left: clamp(2px, 0.8vw, 10px);
+            opacity: 0.75;
+            margin-left: clamp(1px, 0.8vw, 10px);
         }
 
         /* Modern gradient color variants */
