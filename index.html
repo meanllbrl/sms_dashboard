@@ -86,20 +86,20 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            gap: clamp(8px, 1.5vh, 16px);
+            gap: clamp(10px, 2vh, 20px);
             width: 100%;
             height: 100%;
         }
 
         .metric-card {
             background: var(--card-bg);
-            border-radius: clamp(8px, 1.2vh, 16px);
-            padding: clamp(16px, 2.5vh, 32px) clamp(12px, 2vw, 28px);
+            border-radius: clamp(10px, 1.5vh, 18px);
+            padding: clamp(18px, 3vh, 36px) clamp(16px, 2.5vw, 32px);
             width: 100%;
             height: 100%;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            border: 1.5px solid var(--border-color);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             display: flex;
@@ -113,15 +113,15 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 4px;
             background: linear-gradient(90deg, var(--accent-color), var(--accent-color-light, var(--accent-color)));
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.35s ease;
         }
 
         .metric-card:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
             border-color: var(--accent-color);
         }
 
@@ -131,62 +131,79 @@
 
         .card-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: clamp(4px, 0.8vh, 8px);
             flex-shrink: 0;
-            gap: clamp(4px, 1vw, 8px);
         }
 
-        .card-category {
-            font-size: clamp(8px, 1.2vh, 13px);
-            font-weight: 700;
+        .card-title {
+            font-size: clamp(11px, 1.8vh, 18px);
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: clamp(0.5px, 0.2vw, 1.5px);
+            letter-spacing: clamp(0.8px, 0.25vw, 2px);
             color: var(--accent-color);
-            opacity: 0.85;
+            opacity: 0.9;
             display: flex;
             align-items: center;
-            gap: clamp(3px, 0.6vw, 8px);
+            gap: clamp(4px, 0.8vw, 10px);
         }
 
-        .card-category::before {
+        .card-title::before {
             content: '';
-            width: clamp(4px, 1vh, 10px);
-            height: clamp(4px, 1vh, 10px);
+            width: clamp(5px, 1.2vh, 12px);
+            height: clamp(5px, 1.2vh, 12px);
             border-radius: 50%;
             background: var(--accent-color);
-            opacity: 0.7;
+            opacity: 0.8;
             flex-shrink: 0;
+        }
+
+        .card-subtitle {
+            font-size: clamp(11px, 1.8vh, 18px);
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.3;
+            opacity: 0.95;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1vw, 12px);
+            transition: color 0.2s ease;
+        }
+
+        .card-subtitle:hover {
+            color: var(--accent-color);
         }
 
         .dropdown-select {
             background: transparent;
             color: var(--accent-color);
-            border: 1.5px solid var(--accent-color);
-            border-radius: clamp(4px, 1vh, 10px);
-            padding: clamp(3px, 0.7vh, 7px) clamp(18px, 2.5vw, 32px) clamp(3px, 0.7vh, 7px) clamp(6px, 1.2vw, 12px);
-            font-size: clamp(9px, 1.3vh, 13px);
+            border: 2px solid var(--accent-color);
+            border-radius: clamp(6px, 1.2vh, 12px);
+            padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.5vw, 14px);
+            font-size: clamp(10px, 1.5vh, 15px);
             font-weight: 700;
             cursor: pointer;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%233b82f6' d='M5 7L2 4h6z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23337ea9' stroke='%23337ea9' stroke-width='0.5' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right clamp(4px, 1vw, 10px) center;
+            background-position: right clamp(6px, 1.2vw, 12px) center;
+            background-size: clamp(10px, 1.5vh, 14px);
+            padding-right: clamp(24px, 3vw, 36px);
             opacity: 0.95;
-            flex-shrink: 0;
         }
 
         .dropdown-select:hover {
-            background: var(--accent-color);
+            background-color: var(--accent-color);
             color: var(--card-bg);
             opacity: 1;
         }
 
         @media (prefers-color-scheme: dark) {
             .dropdown-select:hover {
-                background: var(--accent-color);
+                background-color: var(--accent-color);
                 color: var(--bg-primary);
             }
         }
@@ -196,71 +213,56 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: clamp(8px, 1.5vh, 12px) 0;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s ease;
-        }
-
-        .metric-card:hover .metric-display {
-            border-color: var(--accent-color);
-            border-image: linear-gradient(90deg, transparent, var(--accent-color), transparent) 1;
+            padding: clamp(10px, 2vh, 16px) 0;
         }
 
         .metric-value {
-            font-size: clamp(24px, 5.5vh, 64px);
+            font-size: clamp(28px, 7vh, 72px);
             font-weight: 900;
             background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-dark, var(--accent-color)) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 0.95;
-            letter-spacing: -0.04em;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
             font-variant-numeric: tabular-nums;
         }
 
         .metric-suffix {
-            font-size: clamp(10px, 1.6vh, 18px);
+            font-size: clamp(11px, 2vh, 20px);
             font-weight: 700;
             color: var(--accent-color);
-            opacity: 0.75;
-            margin-left: clamp(3px, 0.6vw, 8px);
-        }
-
-        .metric-label {
-            font-size: clamp(10px, 1.6vh, 16px);
-            color: var(--text-secondary);
-            font-weight: 500;
-            line-height: 1.4;
-            opacity: 0.95;
+            opacity: 0.8;
+            margin-left: clamp(4px, 0.8vw, 10px);
         }
 
         /* Modern gradient color variants */
-        .card-blue { 
+        .card-blue {
             --accent-color: #3b82f6;
             --accent-color-dark: #2563eb;
             --accent-color-light: #60a5fa;
         }
-        .card-green { 
+        .card-green {
             --accent-color: #10b981;
             --accent-color-dark: #059669;
             --accent-color-light: #34d399;
         }
-        .card-orange { 
+        .card-orange {
             --accent-color: #f59e0b;
             --accent-color-dark: #d97706;
             --accent-color-light: #fbbf24;
         }
-        .card-purple { 
+        .card-purple {
             --accent-color: #8b5cf6;
             --accent-color-dark: #7c3aed;
             --accent-color-light: #a78bfa;
         }
-        .card-pink { 
+        .card-pink {
             --accent-color: #ec4899;
             --accent-color-dark: #db2777;
             --accent-color-light: #f472b6;
         }
-        .card-brown { 
+        .card-brown {
             --accent-color: #a16207;
             --accent-color-dark: #854d0e;
             --accent-color-light: #ca8a04;
@@ -300,7 +302,7 @@
             text-align: center;
             padding: clamp(20px, 4vh, 40px) clamp(10px, 2vw, 20px);
             color: var(--text-secondary);
-            font-size: clamp(11px, 1.4vh, 13px);
+            font-size: clamp(12px, 1.8vh, 16px);
             grid-column: 1 / -1;
             display: flex;
             align-items: center;
@@ -317,7 +319,7 @@
         }
 
         .metric-card {
-            animation: fadeIn 0.3s ease-out backwards;
+            animation: fadeIn 0.35s ease-out backwards;
         }
 
         .metric-card:nth-child(1) { animation-delay: 0.05s; }
@@ -326,61 +328,9 @@
         .metric-card:nth-child(4) { animation-delay: 0.2s; }
         .metric-card:nth-child(5) { animation-delay: 0.25s; }
         .metric-card:nth-child(6) { animation-delay: 0.3s; }
-
-        /* Reload button - responsive */
-        .reload-btn {
-            position: fixed;
-            top: clamp(8px, 1.8vh, 24px);
-            right: clamp(8px, 1.8vw, 24px);
-            width: clamp(32px, 4.5vh, 52px);
-            height: clamp(32px, 4.5vh, 52px);
-            border-radius: 50%;
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            box-shadow: var(--shadow-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .reload-btn:hover {
-            transform: scale(1.1) rotate(180deg);
-            border-color: var(--accent-blue);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .reload-btn:active {
-            transform: scale(0.95);
-        }
-
-        .reload-btn.spinning {
-            animation: spin 0.6s linear;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .reload-icon {
-            width: clamp(14px, 2.5vh, 24px);
-            height: clamp(14px, 2.5vh, 24px);
-            stroke: var(--text-primary);
-            stroke-width: 2;
-            fill: none;
-        }
     </style>
 </head>
 <body>
-    <button class="reload-btn" onclick="reloadData()" title="Refresh Data">
-        <svg class="reload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-
     <div class="dashboard-container">
         <div id="dashboard-content" class="cards-grid">
             <div class="loading">Yükleniyor...</div>
@@ -420,14 +370,14 @@
 
         const metricGroups = {
             activeStudents: {
-                category: 'Öğrenci',
+                title: 'Öğrenci Sayısı',
                 colorClass: 'card-blue',
                 metrics: [
-                    { key: 'activeStudentCount', label: 'Aktif Öğrenci Sayısı', format: 'number', suffix: '' }
+                    { key: 'activeStudentCount', label: 'Aktif Öğrenci', format: 'number', suffix: '' }
                 ]
             },
             revenue: {
-                category: 'Gelir',
+                title: 'Gelir Metrikleri',
                 colorClass: 'card-green',
                 metrics: [
                     { key: 'mrr', label: 'Aylık Tekrarlayan Gelir', format: 'currency', suffix: 'MRR' },
@@ -436,15 +386,15 @@
                 ]
             },
             ltv: {
-                category: 'Öğrenci Değeri',
+                title: 'Öğrenci Değeri',
                 colorClass: 'card-purple',
                 metrics: [
-                    { key: 'cltv', label: 'Öğrenci Yaşam Boyu Değeri', format: 'currency', suffix: 'LTV' },
-                    { key: 'averageRevenuePerStudent', label: 'Öğrenci Başı Ortalama Gelir', format: 'currency', suffix: 'ARPU' }
+                    { key: 'cltv', label: 'Yaşam Boyu Değer', format: 'currency', suffix: 'LTV' },
+                    { key: 'averageRevenuePerStudent', label: 'Ortalama Gelir', format: 'currency', suffix: 'ARPU' }
                 ]
             },
             cac: {
-                category: 'Edinim',
+                title: 'Edinim Maliyeti',
                 colorClass: 'card-orange',
                 metrics: [
                     { key: 'cac', label: 'Öğrenci Edinim Maliyeti', format: 'currency', suffix: 'CAC' },
@@ -452,20 +402,20 @@
                 ]
             },
             engagement: {
-                category: 'Aktivite',
+                title: 'Aktivite Metrikleri',
                 colorClass: 'card-pink',
                 metrics: [
-                    { key: 'avgWeeklyFrequency', label: 'Haftalık Ortalama Ders', format: 'decimal', suffix: 'ders' },
-                    { key: 'averageSessionLength', label: 'Ortalama Ders Süresi', format: 'decimal', suffix: 'dk' },
-                    { key: 'churnedUserPercentage', label: 'Ayrılan Öğrenci Oranı', format: 'percentage', suffix: '%' }
+                    { key: 'avgWeeklyFrequency', label: 'Haftalık Ders Sayısı', format: 'decimal', suffix: 'ders' },
+                    { key: 'averageSessionLength', label: 'Ortalama Ders Süresi', format: 'decimal', suffix: 'dakika' },
+                    { key: 'churnedUserPercentage', label: 'Ayrılan Öğrenci', format: 'percentage', suffix: '%' }
                 ]
             },
             hourlyRate: {
-                category: 'Verimlilik',
+                title: 'Verimlilik',
                 colorClass: 'card-brown',
                 metrics: [
                     { key: 'averageHourlyRate', label: 'Saatlik Ortalama Gelir', format: 'currency', suffix: '₺/saat' },
-                    { key: 'monthlyAverageRevenue', label: 'Aylık Ortalama Gelir', format: 'currency', suffix: 'Ort.' }
+                    { key: 'monthlyAverageRevenue', label: 'Aylık Ortalama', format: 'currency', suffix: 'Ort.' }
                 ]
             }
         };
@@ -502,8 +452,11 @@
             let displayValue = formattedValue;
             let displaySuffix = metric.suffix;
             
-            if (metric.format === 'currency' && !metric.suffix.includes('₺')) {
+            if (metric.format === 'currency' && !metric.suffix.includes('₺') && !metric.suffix.includes('/saat')) {
                 displayValue = '₺' + formattedValue;
+            } else if (metric.suffix === '₺/saat') {
+                displayValue = '₺' + formattedValue;
+                displaySuffix = '/saat';
             }
             
             // Calculate LTV/CAC ratio if both exist
@@ -512,9 +465,35 @@
                 return `
                     <div class="metric-card ${groupConfig.colorClass}">
                         <div class="card-header">
-                            <div class="card-category">
-                                ${groupConfig.category}
+                            <div class="card-title">${groupConfig.title}</div>
+                            <div class="card-subtitle">
+                                ${metric.label}
+                                ${hasDropdown ? `
+                                    <select class="dropdown-select" onchange="updateMetric('${groupKey}', this.value)">
+                                        ${groupConfig.metrics.map((m, idx) => `
+                                            <option value="${idx}" ${idx === selectedIndex ? 'selected' : ''}>
+                                                ${m.suffix}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                ` : ''}
                             </div>
+                        </div>
+                        <div class="metric-display">
+                            <div class="metric-value">
+                                ${ratio}<span class="metric-suffix">${displaySuffix}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="metric-card ${groupConfig.colorClass}">
+                    <div class="card-header">
+                        <div class="card-title">${groupConfig.title}</div>
+                        <div class="card-subtitle">
+                            ${metric.label}
                             ${hasDropdown ? `
                                 <select class="dropdown-select" onchange="updateMetric('${groupKey}', this.value)">
                                     ${groupConfig.metrics.map((m, idx) => `
@@ -525,38 +504,12 @@
                                 </select>
                             ` : ''}
                         </div>
-                        <div class="metric-display">
-                            <div class="metric-value">
-                                ${ratio}<span class="metric-suffix">${displaySuffix}</span>
-                            </div>
-                        </div>
-                        <div class="metric-label">${metric.label}</div>
-                    </div>
-                `;
-            }
-            
-            return `
-                <div class="metric-card ${groupConfig.colorClass}">
-                    <div class="card-header">
-                        <div class="card-category">
-                            ${groupConfig.category}
-                        </div>
-                        ${hasDropdown ? `
-                            <select class="dropdown-select" onchange="updateMetric('${groupKey}', this.value)">
-                                ${groupConfig.metrics.map((m, idx) => `
-                                    <option value="${idx}" ${idx === selectedIndex ? 'selected' : ''}>
-                                        ${m.suffix}
-                                    </option>
-                                `).join('')}
-                            </select>
-                        ` : ''}
                     </div>
                     <div class="metric-display">
                         <div class="metric-value">
                             ${displayValue}<span class="metric-suffix">${displaySuffix}</span>
                         </div>
                     </div>
-                    <div class="metric-label">${metric.label}</div>
                 </div>
             `;
         }
@@ -641,18 +594,6 @@
             }
         }
 
-        // Reload data with animation
-        function reloadData() {
-            const btn = document.querySelector('.reload-btn');
-            btn.classList.add('spinning');
-            
-            fetchData().then(() => {
-                setTimeout(() => {
-                    btn.classList.remove('spinning');
-                }, 600);
-            });
-        }
-
         // Initialize on load
         if (isAuthorized()) {
             fetchData();
@@ -663,4 +604,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
