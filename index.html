@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Notion Light Mode */
+            --bg-primary: #ffffff;
+            --card-bg: #ffffff;
+            --text-primary: #37352f;
+            --text-secondary: #787774;
+            --text-muted: #9b9a97;
+            --border-color: rgba(227, 226, 224, 0.5);
+            --shadow: 0 1px 1px rgba(15, 15, 15, 0.05);
+            --hover-shadow: 0 2px 4px rgba(15, 15, 15, 0.08);
+            
+            /* Notion-native subtle accent colors */
+            --accent-default: #37352f;
+            --accent-gray: #787774;
+            --accent-brown: #9f6b53;
+            --accent-orange: #d9730d;
+            --accent-yellow: #cb912f;
+            --accent-green: #448361;
+            --accent-blue: #337ea9;
+            --accent-purple: #9065b0;
+            --accent-pink: #c14c8a;
+            --accent-red: #d44c47;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Notion Dark Mode */
+                --bg-primary: #191919;
+                --card-bg: #191919;
+                --text-primary: rgba(255, 255, 255, 0.9);
+                --text-secondary: rgba(255, 255, 255, 0.6);
+                --text-muted: rgba(255, 255, 255, 0.4);
+                --border-color: rgba(255, 255, 255, 0.09);
+                --shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+                --hover-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+                
+                /* Dark mode accents */
+                --accent-default: rgba(255, 255, 255, 0.9);
+                --accent-gray: #9b9a97;
+                --accent-brown: #ba856f;
+                --accent-orange: #e8a567;
+                --accent-yellow: #e0af63;
+                --accent-green: #579668;
+                --accent-blue: #529cca;
+                --accent-purple: #ab7cd1;
+                --accent-pink: #dd7fa6;
+                --accent-red: #e87b76;
+            }
+        }
+
+        body {
+            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1300px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            width: 100%;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px 24px;
+            width: 100%;
+            max-width: 280px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-color-light, var(--accent-color)));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .card-category {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent-color);
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-category::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            opacity: 0.6;
+        }
+
+        .dropdown-select {
+            background: transparent;
+            color: var(--accent-color);
+            border: 1.5px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 5px 26px 5px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%233b82f6' d='M5 7L2 4h6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            opacity: 0.9;
+        }
+
+        .dropdown-select:hover {
+            background: var(--accent-color);
+            color: var(--card-bg);
+            opacity: 1;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .dropdown-select:hover {
+                background: var(--accent-color);
+                color: var(--bg-primary);
+            }
+        }
+
+        .metric-display {
+            margin-bottom: 12px;
+            padding: 12px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .metric-card:hover .metric-display {
+            border-color: var(--accent-color);
+            border-image: linear-gradient(90deg, transparent, var(--accent-color), transparent) 1;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-dark, var(--accent-color)) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .metric-suffix {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-color);
+            opacity: 0.7;
+            margin-left: 6px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        /* Modern gradient color variants */
+        .card-blue { 
+            --accent-color: #3b82f6;
+            --accent-color-dark: #2563eb;
+            --accent-color-light: #60a5fa;
+        }
+        .card-green { 
+            --accent-color: #10b981;
+            --accent-color-dark: #059669;
+            --accent-color-light: #34d399;
+        }
+        .card-orange { 
+            --accent-color: #f59e0b;
+            --accent-color-dark: #d97706;
+            --accent-color-light: #fbbf24;
+        }
+        .card-purple { 
+            --accent-color: #8b5cf6;
+            --accent-color-dark: #7c3aed;
+            --accent-color-light: #a78bfa;
+        }
+        .card-pink { 
+            --accent-color: #ec4899;
+            --accent-color-dark: #db2777;
+            --accent-color-light: #f472b6;
+        }
+        .card-brown { 
+            --accent-color: #a16207;
+            --accent-color-dark: #854d0e;
+            --accent-color-light: #ca8a04;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 10px;
+            }
+            .metric-card {
+                padding: 20px 16px;
+                max-width: 100%;
+            }
+            .metric-value { font-size: 32px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .metric-card { padding: 18px 14px; }
+            .metric-value { font-size: 28px; }
+        }
+
+        .loading, .error, .unauthorized {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .error { color: var(--accent-red); }
+        .unauthorized { color: var(--text-muted); }
+
+        /* Subtle fade-in */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .metric-card {
+            animation: fadeIn 0.3s ease-out backwards;
+        }
+
+        .metric-card:nth-child(1) { animation-delay: 0.05s; }
+        .metric-card:nth-child(2) { animation-delay: 0.1s; }
+        .metric-card:nth-child(3) { animation-delay: 0.15s; }
+        .metric-card:nth-child(4) { animation-delay: 0.2s; }
+        .metric-card:nth-child(5) { animation-delay: 0.25s; }
+        .metric-card:nth-child(6) { animation-delay: 0.3s; }
+
+        /* Reload button */
+        .reload-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .reload-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .reload-btn:active {
+            transform: scale(0.95);
+        }
+
+        .reload-btn.spinning {
+            animation: spin 0.6s linear;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .reload-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-primary);
+            stroke-width: 2;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+    <button class="reload-btn" onclick="reloadData()" title="Refresh Data">
+        <svg class="reload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <div class="dashboard-container">
+        <div id="dashboard-content" class="cards-grid">
+            <div class="loading">Yükleniyor...</div>
+        </div>
+    </div>
+
+    <script>
+        // Get parameters from URL
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                key: params.get('key'),
+                endpoint: params.get('endpoint')
+            };
+        }
+
+        // Decode endpoint from base64
+        function decodeEndpoint(encoded) {
+            try {
+                return atob(encoded);
+            } catch {
+                return null;
+            }
+        }
+
+        // Check authorization
+        function isAuthorized() {
+            const { key, endpoint } = getUrlParams();
+            return key && key.length > 0 && endpoint && endpoint.length > 0;
+        }
+
+        // Show unauthorized message
+        function showUnauthorized() {
+            document.getElementById('dashboard-content').innerHTML = 
+                '<div class="unauthorized">Erişim reddedildi</div>';
+        }
+
+        const metricGroups = {
+            activeStudents: {
+                category: 'Öğrenci',
+                colorClass: 'card-blue',
+                metrics: [
+                    { key: 'activeStudentCount', label: 'Aktif Öğrenci Sayısı', format: 'number', suffix: '' }
+                ]
+            },
+            revenue: {
+                category: 'Gelir',
+                colorClass: 'card-green',
+                metrics: [
+                    { key: 'mrr', label: 'Aylık Tekrarlayan Gelir', format: 'currency', suffix: 'MRR' },
+                    { key: 'arr', label: 'Yıllık Tekrarlayan Gelir', format: 'currency', suffix: 'ARR' },
+                    { key: 'wrr', label: 'Haftalık Tekrarlayan Gelir', format: 'currency', suffix: 'WRR' }
+                ]
+            },
+            ltv: {
+                category: 'Öğrenci Değeri',
+                colorClass: 'card-purple',
+                metrics: [
+                    { key: 'cltv', label: 'Öğrenci Yaşam Boyu Değeri', format: 'currency', suffix: 'LTV' },
+                    { key: 'averageRevenuePerStudent', label: 'Öğrenci Başı Ortalama Gelir', format: 'currency', suffix: 'ARPU' }
+                ]
+            },
+            cac: {
+                category: 'Edinim',
+                colorClass: 'card-orange',
+                metrics: [
+                    { key: 'cac', label: 'Öğrenci Edinim Maliyeti', format: 'currency', suffix: 'CAC' },
+                    { key: 'cltv_cac_ratio', label: 'LTV/CAC Oranı', format: 'decimal', suffix: 'x' }
+                ]
+            },
+            engagement: {
+                category: 'Aktivite',
+                colorClass: 'card-pink',
+                metrics: [
+                    { key: 'avgWeeklyFrequency', label: 'Haftalık Ortalama Ders', format: 'decimal', suffix: 'ders' },
+                    { key: 'averageSessionLength', label: 'Ortalama Ders Süresi', format: 'decimal', suffix: 'dk' },
+                    { key: 'churnedUserPercentage', label: 'Ayrılan Öğrenci Oranı', format: 'percentage', suffix: '%' }
+                ]
+            },
+            hourlyRate: {
+                category: 'Verimlilik',
+                colorClass: 'card-brown',
+                metrics: [
+                    { key: 'averageHourlyRate', label: 'Saatlik Ortalama Gelir', format: 'currency', suffix: '₺/saat' },
+                    { key: 'monthlyAverageRevenue', label: 'Aylık Ortalama Gelir', format: 'currency', suffix: 'Ort.' }
+                ]
+            }
+        };
+
+        function formatValue(value, format) {
+            if (value === null || value === undefined) return '-';
+            
+            switch(format) {
+                case 'currency':
+                    const formatted = new Intl.NumberFormat('tr-TR', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    }).format(value);
+                    return formatted.replace(/\./g, ',');
+                    
+                case 'percentage':
+                    return value.toFixed(1);
+                    
+                case 'decimal':
+                    return value.toFixed(2);
+                    
+                case 'number':
+                default:
+                    return new Intl.NumberFormat('tr-TR').format(value);
+            }
+        }
+
+        function createMetricCard(groupKey, groupConfig, data, selectedIndex = 0) {
+            const metric = groupConfig.metrics[selectedIndex];
+            const value = data[metric.key];
+            const formattedValue = formatValue(value, metric.format);
+            const hasDropdown = groupConfig.metrics.length > 1;
+            
+            let displayValue = formattedValue;
+            let displaySuffix = metric.suffix;
+            
+            if (metric.format === 'currency' && !metric.suffix.includes('₺')) {
+                displayValue = '₺' + formattedValue;
+            }
+            
+            // Calculate LTV/CAC ratio if both exist
+            if (metric.key === 'cltv_cac_ratio') {
+                const ratio = data.cltv && data.cac ? (data.cltv / data.cac).toFixed(2) : '-';
+                return `
+                    <div class="metric-card ${groupConfig.colorClass}">
+                        <div class="card-header">
+                            <div class="card-category">
+                                ${groupConfig.category}
+                            </div>
+                            ${hasDropdown ? `
+                                <select class="dropdown-select" onchange="updateMetric('${groupKey}', this.value)">
+                                    ${groupConfig.metrics.map((m, idx) => `
+                                        <option value="${idx}" ${idx === selectedIndex ? 'selected' : ''}>
+                                            ${m.suffix}
+                                        </option>
+                                    `).join('')}
+                                </select>
+                            ` : ''}
+                        </div>
+                        <div class="metric-display">
+                            <div class="metric-value">
+                                ${ratio}<span class="metric-suffix">${displaySuffix}</span>
+                            </div>
+                        </div>
+                        <div class="metric-label">${metric.label}</div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="metric-card ${groupConfig.colorClass}">
+                    <div class="card-header">
+                        <div class="card-category">
+                            ${groupConfig.category}
+                        </div>
+                        ${hasDropdown ? `
+                            <select class="dropdown-select" onchange="updateMetric('${groupKey}', this.value)">
+                                ${groupConfig.metrics.map((m, idx) => `
+                                    <option value="${idx}" ${idx === selectedIndex ? 'selected' : ''}>
+                                        ${m.suffix}
+                                    </option>
+                                `).join('')}
+                            </select>
+                        ` : ''}
+                    </div>
+                    <div class="metric-display">
+                        <div class="metric-value">
+                            ${displayValue}<span class="metric-suffix">${displaySuffix}</span>
+                        </div>
+                    </div>
+                    <div class="metric-label">${metric.label}</div>
+                </div>
+            `;
+        }
+
+        let currentSelections = {
+            activeStudents: 0,
+            revenue: 0,
+            ltv: 0,
+            cac: 0,
+            engagement: 0,
+            hourlyRate: 0
+        };
+
+        function renderDashboard(data) {
+            const container = document.getElementById('dashboard-content');
+            const cards = Object.entries(metricGroups).map(([key, config]) => 
+                createMetricCard(key, config, data, currentSelections[key])
+            ).join('');
+            
+            container.innerHTML = cards;
+        }
+
+        let cachedData = null;
+
+        function updateMetric(groupKey, selectedIndex) {
+            currentSelections[groupKey] = parseInt(selectedIndex);
+            if (cachedData) {
+                renderDashboard(cachedData);
+            }
+        }
+
+        // Fetch data with authorization
+        async function fetchData() {
+            if (!isAuthorized()) {
+                showUnauthorized();
+                return Promise.resolve();
+            }
+
+            const { key, endpoint } = getUrlParams();
+            const decodedEndpoint = decodeEndpoint(endpoint);
+            
+            if (!decodedEndpoint) {
+                document.getElementById('dashboard-content').innerHTML = 
+                    '<div class="error">Yapılandırma hatası</div>';
+                return Promise.resolve();
+            }
+
+            try {
+                // Try direct fetch first (in case CORS is configured)
+                let response;
+                try {
+                    response = await fetch(decodedEndpoint, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Basic ${key}`
+                        }
+                    });
+                } catch (corsError) {
+                    // If CORS fails, try with proxy
+                    const proxyUrl = `https://thingproxy.freeboard.io/fetch/${decodedEndpoint}`;
+                    response = await fetch(proxyUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Basic ${key}`
+                        }
+                    });
+                }
+
+                if (!response.ok) {
+                    throw new Error('Veri alınamadı');
+                }
+
+                const data = await response.json();
+                cachedData = data;
+                renderDashboard(cachedData);
+                return Promise.resolve();
+            } catch (error) {
+                document.getElementById('dashboard-content').innerHTML = 
+                    '<div class="error">Veri yüklenemedi</div>';
+                console.error('Fetch error:', error);
+                return Promise.resolve();
+            }
+        }
+
+        // Reload data with animation
+        function reloadData() {
+            const btn = document.querySelector('.reload-btn');
+            btn.classList.add('spinning');
+            
+            fetchData().then(() => {
+                setTimeout(() => {
+                    btn.classList.remove('spinning');
+                }, 600);
+            });
+        }
+
+        // Initialize on load
+        if (isAuthorized()) {
+            fetchData();
+            // Auto-refresh every minute
+            setInterval(fetchData, 60000);
+        } else {
+            showUnauthorized();
+        }
+    </script>
+</body>
+</html> 
