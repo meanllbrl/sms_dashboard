@@ -83,6 +83,7 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            gap: clamp(12px, 2vh, 20px);
         }
 
         .cards-grid {
@@ -91,7 +92,57 @@
             grid-template-rows: repeat(2, 1fr);
             gap: clamp(12px, 2.5vh, 24px);
             width: 100%;
+            flex: 2;
+        }
+
+        .bottom-section {
+            display: flex;
+            gap: clamp(12px, 2.5vh, 24px);
+            align-items: center;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .list-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: clamp(10px, 2vh, 18px);
             flex: 1;
+        }
+
+        .list-item {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: clamp(8px, 1.2vh, 14px);
+            padding: clamp(10px, 1.8vh, 20px) clamp(12px, 2vw, 24px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .list-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .list-item-label {
+            font-size: clamp(10px, 1.6vh, 16px);
+            font-weight: 600;
+            color: var(--text-secondary);
+            opacity: 0.95;
+        }
+
+        .list-item-value {
+            font-size: clamp(14px, 2.2vh, 22px);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-dark, var(--accent-color)) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .metric-card {
@@ -271,19 +322,23 @@
             --accent-color-dark: #854d0e;
             --accent-color-light: #ca8a04;
         }
+        .card-red {
+            --accent-color: #dc2626;
+            --accent-color-dark: #b91c1c;
+            --accent-color-light: #ef4444;
+        }
 
-        /* Reload button - centered at bottom */
-        .reload-container {
+        /* Reload button - divider style */
+        .reload-divider {
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: clamp(8px, 2vh, 16px) 0;
+            justify-content: center;
             flex-shrink: 0;
         }
 
         .reload-btn {
-            width: clamp(40px, 5.5vh, 56px);
-            height: clamp(40px, 5.5vh, 56px);
+            width: clamp(44px, 6vh, 60px);
+            height: clamp(44px, 6vh, 60px);
             border-radius: 50%;
             background: var(--card-bg);
             border: 2.5px solid var(--border-color);
@@ -298,12 +353,12 @@
         .reload-btn:hover {
             border-color: var(--accent-blue);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            transform: translateY(-3px);
+            transform: scale(1.05);
         }
 
         .reload-icon {
-            width: clamp(18px, 3vh, 28px);
-            height: clamp(18px, 3vh, 28px);
+            width: clamp(20px, 3.2vh, 30px);
+            height: clamp(20px, 3.2vh, 30px);
             stroke: var(--text-primary);
             stroke-width: 2.5;
             fill: none;
@@ -358,6 +413,14 @@
             .metric-value {
                 font-size: clamp(22px, 6.5vh, 56px);
             }
+            
+            .list-item-label {
+                font-size: clamp(9px, 1.4vh, 13px);
+            }
+            
+            .list-item-value {
+                font-size: clamp(12px, 1.9vh, 18px);
+            }
         }
 
         @media (max-width: 600px) {
@@ -369,6 +432,37 @@
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(3, 1fr);
                 gap: clamp(6px, 1.2vh, 10px);
+            }
+            
+            .bottom-section {
+                flex-direction: column;
+                gap: clamp(8px, 1.5vh, 12px);
+            }
+            
+            .list-metrics {
+                gap: clamp(6px, 1vh, 8px);
+            }
+            
+            .list-item {
+                padding: clamp(6px, 1.2vh, 10px) clamp(8px, 1.5vw, 12px);
+            }
+            
+            .list-item-label {
+                font-size: clamp(8px, 1.3vh, 11px);
+            }
+            
+            .list-item-value {
+                font-size: clamp(11px, 1.8vh, 16px);
+            }
+            
+            .reload-btn {
+                width: clamp(36px, 4.5vh, 48px);
+                height: clamp(36px, 4.5vh, 48px);
+            }
+            
+            .reload-icon {
+                width: clamp(16px, 2.5vh, 22px);
+                height: clamp(16px, 2.5vh, 22px);
             }
             
             .metric-card {
@@ -484,12 +578,23 @@
         <div id="dashboard-content" class="cards-grid">
             <div class="loading">Yükleniyor...</div>
         </div>
-        <div class="reload-container">
-            <button class="reload-btn" onclick="reloadData()" title="Yenile">
-                <svg class="reload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
+        
+        <div class="bottom-section">
+            <div id="list-metrics-left" class="list-metrics">
+                <!-- Left list items will be inserted here -->
+            </div>
+            
+            <div class="reload-divider">
+                <button class="reload-btn" onclick="reloadData()" title="Yenile">
+                    <svg class="reload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="list-metrics-right" class="list-metrics">
+                <!-- Right list items will be inserted here -->
+            </div>
         </div>
     </div>
 
@@ -532,13 +637,20 @@
                     { key: 'activeStudentCount', label: 'Aktif Öğrenci', format: 'number', suffix: '' }
                 ]
             },
-            revenue: {
-                title: 'Gelir Metrikleri',
+            recurringRevenue: {
+                title: 'Yinelenen Gelirler',
                 colorClass: 'card-green',
                 metrics: [
                     { key: 'mrr', label: 'Aylık Tekrarlayan Gelir', format: 'currency', suffix: 'MRR' },
                     { key: 'arr', label: 'Yıllık Tekrarlayan Gelir', format: 'currency', suffix: 'ARR' },
                     { key: 'wrr', label: 'Haftalık Tekrarlayan Gelir', format: 'currency', suffix: 'WRR' }
+                ]
+            },
+            totalRevenue: {
+                title: 'Kazanılan Toplam Gelir',
+                colorClass: 'card-green',
+                metrics: [
+                    { key: 'totalRevenue', label: 'Toplam Gelir', format: 'currency', suffix: 'Toplam' }
                 ]
             },
             ltv: {
@@ -557,16 +669,7 @@
                     { key: 'cltv_cac_ratio', label: 'LTV/CAC Oranı', format: 'decimal', suffix: 'x' }
                 ]
             },
-            engagement: {
-                title: 'Aktivite Metrikleri',
-                colorClass: 'card-pink',
-                metrics: [
-                    { key: 'avgWeeklyFrequency', label: 'Haftalık Ders Sayısı', format: 'decimal', suffix: 'ders' },
-                    { key: 'averageSessionLength', label: 'Ortalama Ders Süresi', format: 'decimal', suffix: 'dakika' },
-                    { key: 'churnedUserPercentage', label: 'Ayrılan Öğrenci', format: 'percentage', suffix: '%' }
-                ]
-            },
-            hourlyRate: {
+            efficiency: {
                 title: 'Verimlilik',
                 colorClass: 'card-brown',
                 metrics: [
@@ -575,6 +678,13 @@
                 ]
             }
         };
+
+        const listMetrics = [
+            { key: 'avgWeeklyFrequency', label: 'Haftalık Ders Sayısı', format: 'decimal', suffix: ' ders', colorClass: 'card-pink' },
+            { key: 'averageSessionLength', label: 'Ortalama Ders Süresi', format: 'decimal', suffix: ' dk', colorClass: 'card-pink' },
+            { key: 'churnedUserPercentage', label: 'Ayrılan Öğrenci', format: 'percentage', suffix: '%', colorClass: 'card-red' },
+            { key: 'cltv_cac_ratio', label: 'LTV/CAC Oranı', format: 'decimal', suffix: 'x', colorClass: 'card-orange' }
+        ];
 
         function formatValue(value, format) {
             if (value === null || value === undefined) return '-';
@@ -686,20 +796,54 @@
 
         let currentSelections = {
             activeStudents: 0,
-            revenue: 0,
+            recurringRevenue: 0,
+            totalRevenue: 0,
             ltv: 0,
             cac: 0,
-            engagement: 0,
-            hourlyRate: 0
+            efficiency: 0
         };
 
+        function createListItem(metric, data) {
+            let value = data[metric.key];
+            
+            // Calculate LTV/CAC ratio if needed
+            if (metric.key === 'cltv_cac_ratio') {
+                value = data.cltv && data.cac ? (data.cltv / data.cac) : 0;
+            }
+            
+            const formattedValue = formatValue(value, metric.format);
+            const displayValue = formattedValue + metric.suffix;
+            
+            return `
+                <div class="list-item ${metric.colorClass}">
+                    <span class="list-item-label">${metric.label}</span>
+                    <span class="list-item-value">${displayValue}</span>
+                </div>
+            `;
+        }
+
         function renderDashboard(data) {
+            // Calculate total revenue if not provided
+            if (!data.totalRevenue) {
+                data.totalRevenue = (data.mrr || 0) * 12; // Simple estimate: MRR * 12
+            }
+            
+            // Render grid cards
             const container = document.getElementById('dashboard-content');
             const cards = Object.entries(metricGroups).map(([key, config]) => 
                 createMetricCard(key, config, data, currentSelections[key])
             ).join('');
-            
             container.innerHTML = cards;
+            
+            // Render list metrics (split into left and right)
+            const leftContainer = document.getElementById('list-metrics-left');
+            const rightContainer = document.getElementById('list-metrics-right');
+            
+            const leftItems = listMetrics.slice(0, 2).map(metric => createListItem(metric, data)).join('');
+            const rightItems = listMetrics.slice(2, 4).map(metric => createListItem(metric, data)).join('');
+            
+            leftContainer.innerHTML = leftItems;
+            rightContainer.innerHTML = rightItems;
         }
 
         let cachedData = null;
