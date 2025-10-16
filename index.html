@@ -65,8 +65,11 @@
             font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            padding: 24px;
-            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -74,28 +77,34 @@
 
         .dashboard-container {
             width: 100%;
-            max-width: 1300px;
+            height: 100%;
+            padding: clamp(8px, 2vh, 20px);
+            box-sizing: border-box;
         }
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            justify-items: center;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: clamp(8px, 1.5vh, 16px);
             width: 100%;
+            height: 100%;
         }
 
         .metric-card {
             background: var(--card-bg);
-            border-radius: 12px;
-            padding: 28px 24px;
+            border-radius: clamp(8px, 1vh, 12px);
+            padding: clamp(16px, 2vh, 24px) clamp(12px, 1.5vw, 20px);
             width: 100%;
-            max-width: 280px;
+            height: 100%;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .metric-card::before {
@@ -124,38 +133,39 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 16px;
-            gap: 8px;
+            flex-shrink: 0;
+            gap: clamp(4px, 1vw, 8px);
         }
 
         .card-category {
-            font-size: 10px;
+            font-size: clamp(8px, 1vh, 10px);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: clamp(0.5px, 0.15vw, 1.2px);
             color: var(--accent-color);
             opacity: 0.8;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: clamp(3px, 0.5vw, 6px);
         }
 
         .card-category::before {
             content: '';
-            width: 8px;
-            height: 8px;
+            width: clamp(4px, 0.8vh, 8px);
+            height: clamp(4px, 0.8vh, 8px);
             border-radius: 50%;
             background: var(--accent-color);
             opacity: 0.6;
+            flex-shrink: 0;
         }
 
         .dropdown-select {
             background: transparent;
             color: var(--accent-color);
             border: 1.5px solid var(--accent-color);
-            border-radius: 8px;
-            padding: 5px 26px 5px 10px;
-            font-size: 11px;
+            border-radius: clamp(4px, 0.8vh, 8px);
+            padding: clamp(3px, 0.5vh, 5px) clamp(18px, 2vw, 26px) clamp(3px, 0.5vh, 5px) clamp(6px, 1vw, 10px);
+            font-size: clamp(9px, 1.1vh, 11px);
             font-weight: 600;
             cursor: pointer;
             outline: none;
@@ -163,8 +173,9 @@
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%233b82f6' d='M5 7L2 4h6z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 8px center;
+            background-position: right clamp(4px, 0.8vw, 8px) center;
             opacity: 0.9;
+            flex-shrink: 0;
         }
 
         .dropdown-select:hover {
@@ -181,8 +192,11 @@
         }
 
         .metric-display {
-            margin-bottom: 12px;
-            padding: 12px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(8px, 1.5vh, 12px) 0;
             border-bottom: 2px solid transparent;
             transition: border-color 0.3s ease;
         }
@@ -193,31 +207,30 @@
         }
 
         .metric-value {
-            font-size: 42px;
+            font-size: clamp(24px, 4vh, 42px);
             font-weight: 800;
             background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-dark, var(--accent-color)) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             line-height: 1;
-            margin-bottom: 8px;
             letter-spacing: -0.03em;
             font-variant-numeric: tabular-nums;
         }
 
         .metric-suffix {
-            font-size: 14px;
+            font-size: clamp(10px, 1.2vh, 14px);
             font-weight: 600;
             color: var(--accent-color);
             opacity: 0.7;
-            margin-left: 6px;
+            margin-left: clamp(3px, 0.5vw, 6px);
         }
 
         .metric-label {
-            font-size: 13px;
+            font-size: clamp(10px, 1.3vh, 13px);
             color: var(--text-secondary);
             font-weight: 500;
-            line-height: 1.5;
+            line-height: 1.4;
             opacity: 0.9;
         }
 
@@ -253,35 +266,45 @@
             --accent-color-light: #ca8a04;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            body { padding: 12px; }
+        /* Responsive - No scrolling ever */
+        @media (max-width: 1024px) and (min-width: 769px) {
             .cards-grid {
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-                gap: 10px;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
             }
-            .metric-card {
-                padding: 20px 16px;
-                max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
             }
-            .metric-value { font-size: 32px; }
         }
 
         @media (max-width: 480px) {
-            body { padding: 8px; }
             .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 8px;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                gap: clamp(6px, 1vh, 10px);
             }
-            .metric-card { padding: 18px 14px; }
-            .metric-value { font-size: 28px; }
+        }
+
+        @media (orientation: portrait) and (max-width: 600px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
         }
 
         .loading, .error, .unauthorized {
             text-align: center;
-            padding: 40px 20px;
+            padding: clamp(20px, 4vh, 40px) clamp(10px, 2vw, 20px);
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: clamp(11px, 1.4vh, 13px);
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .error { color: var(--accent-red); }
@@ -304,13 +327,13 @@
         .metric-card:nth-child(5) { animation-delay: 0.25s; }
         .metric-card:nth-child(6) { animation-delay: 0.3s; }
 
-        /* Reload button */
+        /* Reload button - responsive */
         .reload-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
+            top: clamp(8px, 1.5vh, 20px);
+            right: clamp(8px, 1.5vw, 20px);
+            width: clamp(32px, 4vh, 44px);
+            height: clamp(32px, 4vh, 44px);
             border-radius: 50%;
             background: var(--card-bg);
             border: 2px solid var(--border-color);
@@ -343,8 +366,8 @@
         }
 
         .reload-icon {
-            width: 20px;
-            height: 20px;
+            width: clamp(14px, 2vh, 20px);
+            height: clamp(14px, 2vh, 20px);
             stroke: var(--text-primary);
             stroke-width: 2;
             fill: none;
