@@ -328,47 +328,115 @@
             .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(3, 1fr);
+                gap: clamp(10px, 2vh, 18px);
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 768px) and (min-width: 601px) {
             .cards-grid {
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .cards-grid {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: repeat(3, 1fr);
-                gap: clamp(8px, 1.5vh, 12px);
+                gap: clamp(8px, 1.8vh, 14px);
             }
             
             .metric-card {
-                padding: clamp(8px, 2vh, 16px) clamp(6px, 1.5vw, 12px);
+                padding: clamp(10px, 2.5vh, 20px) clamp(10px, 2vw, 16px);
             }
             
             .card-title {
-                font-size: clamp(8px, 1.4vh, 12px);
+                font-size: clamp(9px, 1.7vh, 15px);
             }
             
             .card-subtitle {
-                font-size: clamp(8px, 1.4vh, 12px);
+                font-size: clamp(9px, 1.7vh, 15px);
             }
             
             .dropdown-select {
-                font-size: clamp(7px, 1.2vh, 10px);
-                padding: clamp(2px, 0.5vh, 4px) clamp(4px, 1vw, 8px);
-                padding-right: clamp(16px, 2.5vw, 20px);
+                font-size: clamp(8px, 1.4vh, 12px);
             }
             
             .metric-value {
-                font-size: clamp(18px, 5vh, 40px);
+                font-size: clamp(22px, 6.5vh, 56px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-container {
+                padding: clamp(6px, 1.5vh, 12px);
+            }
+            
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                gap: clamp(6px, 1.2vh, 10px);
+            }
+            
+            .metric-card {
+                padding: clamp(8px, 1.8vh, 14px) clamp(8px, 2vw, 12px);
+                border-radius: clamp(6px, 1vh, 10px);
+            }
+            
+            .card-header {
+                gap: clamp(2px, 0.5vh, 4px);
+            }
+            
+            .card-title {
+                font-size: clamp(9px, 1.6vh, 13px);
+                letter-spacing: 0.3px;
+                gap: clamp(3px, 0.5vw, 5px);
+            }
+            
+            .card-title::before {
+                width: clamp(4px, 0.8vh, 6px);
+                height: clamp(4px, 0.8vh, 6px);
+            }
+            
+            .card-subtitle {
+                font-size: clamp(8px, 1.4vh, 11px);
+                gap: clamp(3px, 0.8vw, 6px);
+                line-height: 1.1;
+            }
+            
+            .dropdown-select {
+                font-size: clamp(7px, 1.2vh, 9px);
+                padding: clamp(2px, 0.4vh, 3px) clamp(4px, 1vw, 6px);
+                padding-right: clamp(14px, 2vw, 18px);
+                border-width: 1px;
+                border-radius: clamp(3px, 0.6vh, 5px);
+                background-size: clamp(6px, 1vh, 8px);
+                background-position: right clamp(3px, 0.6vw, 5px) center;
+            }
+            
+            .metric-display {
+                padding: clamp(3px, 1vh, 8px) 0;
+            }
+            
+            .metric-value {
+                font-size: clamp(22px, 5.5vh, 44px);
+                line-height: 0.9;
             }
             
             .metric-suffix {
-                font-size: clamp(7px, 1.5vh, 12px);
+                font-size: clamp(8px, 1.6vh, 13px);
+                margin-left: clamp(2px, 0.4vw, 4px);
+            }
+            
+            .reload-btn {
+                width: clamp(32px, 4vh, 40px);
+                height: clamp(32px, 4vh, 40px);
+                border-width: 2px;
+            }
+            
+            .reload-icon {
+                width: clamp(14px, 2vh, 18px);
+                height: clamp(14px, 2vh, 18px);
+                stroke-width: 2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .metric-value {
+                font-size: clamp(20px, 5vh, 38px);
             }
         }
 
@@ -511,8 +579,19 @@
         function formatValue(value, format) {
             if (value === null || value === undefined) return '-';
             
+            // Check if screen is narrow (mobile)
+            const isNarrow = window.innerWidth < 600;
+            
             switch(format) {
                 case 'currency':
+                    // Shorten large numbers on narrow screens
+                    if (isNarrow) {
+                        if (value >= 1000000) {
+                            return (value / 1000000).toFixed(1).replace('.', ',') + 'M';
+                        } else if (value >= 10000) {
+                            return (value / 1000).toFixed(1).replace('.', ',') + 'k';
+                        }
+                    }
                     const formatted = new Intl.NumberFormat('tr-TR', {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0
@@ -527,6 +606,9 @@
                     
                 case 'number':
                 default:
+                    if (isNarrow && value >= 1000) {
+                        return (value / 1000).toFixed(1).replace('.', ',') + 'k';
+                    }
                     return new Intl.NumberFormat('tr-TR').format(value);
             }
         }
@@ -699,6 +781,17 @@
             fetchData();
             // Auto-refresh every minute
             setInterval(fetchData, 60000);
+            
+            // Re-render on window resize to update number formatting
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (cachedData) {
+                        renderDashboard(cachedData);
+                    }
+                }, 250);
+            });
         } else {
             showUnauthorized();
         }
