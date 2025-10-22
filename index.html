@@ -67,18 +67,19 @@
             color: var(--text-primary);
             margin: 0;
             padding: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            min-height: 100vh;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
         }
 
         .dashboard-container {
             width: 100%;
-            flex: 1;
+            max-width: 1400px;
             padding: clamp(10px, 2.5vh, 24px) clamp(10px, 2.5vh, 24px) clamp(6px, 1.5vh, 14px);
             box-sizing: border-box;
             display: flex;
@@ -92,15 +93,17 @@
             grid-template-rows: repeat(2, 1fr);
             gap: clamp(12px, 2.5vh, 24px);
             width: 100%;
-            flex: 2;
+            flex: 0 0 auto;
         }
 
         .bottom-section {
             display: flex;
             gap: clamp(12px, 2.5vh, 24px);
-            align-items: center;
+            align-items: flex-start;
             width: 100%;
             flex-shrink: 0;
+            flex-wrap: wrap;
+            margin-top: clamp(6px, 1.2vh, 16px);
         }
 
         .list-metrics {
@@ -109,6 +112,7 @@
             grid-template-rows: repeat(2, 1fr);
             gap: clamp(10px, 2vh, 18px);
             flex: 1;
+            min-width: 160px;
         }
 
         .list-item {
@@ -384,6 +388,56 @@
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(3, 1fr);
                 gap: clamp(10px, 2vh, 18px);
+            }
+            
+            .dashboard-container {
+                padding: clamp(10px, 1.8vh, 16px);
+                gap: clamp(12px, 1.6vh, 16px);
+            }
+            
+            .metric-card {
+                padding: clamp(12px, 2.5vh, 22px) clamp(10px, 2.2vw, 18px);
+            }
+            
+            .card-title {
+                font-size: clamp(10px, 1.7vh, 15px);
+            }
+            
+            .card-subtitle {
+                font-size: clamp(9px, 1.5vh, 13px);
+            }
+            
+            .metric-value {
+                font-size: clamp(26px, 5.5vh, 48px);
+            }
+            
+            .bottom-section {
+                gap: clamp(10px, 1.8vh, 16px);
+                align-items: flex-start;
+                margin-top: clamp(8px, 1.5vh, 14px);
+                flex-wrap: wrap;
+            }
+            
+            .list-metrics {
+                gap: clamp(8px, 1.5vh, 14px);
+                width: 100%;
+                flex: 1;
+                min-width: 140px;
+            }
+            
+            .list-item {
+                padding: clamp(8px, 1.2vh, 12px) clamp(10px, 1.8vw, 14px);
+            }
+            
+            .reload-btn {
+                width: clamp(42px, 5vh, 56px);
+                height: clamp(42px, 5vh, 56px);
+                flex-shrink: 0;
+            }
+            
+            .reload-divider {
+                align-self: flex-start;
+                margin-top: clamp(4px, 0.8vh, 8px);
             }
         }
 
